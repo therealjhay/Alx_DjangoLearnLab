@@ -1,11 +1,10 @@
-# relationship_app/views.py
+# LibraryProject/relationship_app/views.py
 
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.decorators import login_required, user_passes_test # New imports
+from django.contrib.auth.forms import UserCreationForm # For registration
+from django.contrib.auth import login # For automatic login after registration
+from django.contrib.auth.views import LoginView, LogoutView # Built-in views
 
 from .models import Book, Library, UserProfile # Updated import
 
@@ -22,7 +21,7 @@ def is_member(user):
     """Checks if the user has the 'Member' role."""
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
-# Function-based view to list all books (from previous task)
+# Function-based view to list all books
 def list_books(request):
     """
     Renders a list of all books and their authors.
@@ -31,7 +30,7 @@ def list_books(request):
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
 
-# Class-based view to display details for a specific library (from previous task)
+# Class-based view to display details for a specific library
 class LibraryDetailView(DetailView):
     """
     Displays the details of a single library, including its books.
@@ -41,7 +40,7 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# Function-based view for user registration (from previous task)
+# New: Function-based view for user registration
 def register(request):
     """
     Handles user registration.
@@ -50,34 +49,24 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # UserProfile is created automatically by signal
-            login(request, user)
-            return redirect('books_list')
+            login(request, user) # Log the user in immediately after registration
+            return redirect('books_list') # Redirect to books list or a dashboard
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# New: Role-based views
-@login_required # Ensures user is logged in
-@user_passes_test(is_admin, login_url='/app/login/') # Redirects to login if not admin
-def admin_view(request):
+# New: Class-based view for user login
+class CustomLoginView(LoginView):
     """
-    View accessible only to Admin users.
+    Handles user login using Django's built-in LoginView.
     """
-    return render(request, 'relationship_app/admin_view.html', {'message': 'Welcome, Admin!'})
+    template_name = 'relationship_app/login.html'
+    # success_url is configured via LOGIN_REDIRECT_URL in settings.py
 
-@login_required
-@user_passes_test(is_librarian, login_url='/app/login/')
-def librarian_view(request):
+# New: Class-based view for user logout
+class CustomLogoutView(LogoutView):
     """
-    View accessible only to Librarian users.
+    Handles user logout using Django's built-in LogoutView.
     """
-    return render(request, 'relationship_app/librarian_view.html', {'message': 'Welcome, Librarian!'})
-
-@login_required
-@user_passes_test(is_member, login_url='/app/login/')
-def member_view(request):
-    """
-    View accessible only to Member users.
-    """
-    return render(request, 'relationship_app/member_view.html', {'message': 'Welcome, Member!'})
+    template_name = 'relationship_app/logout.html'
+    # next_page is configured via LOGOUT_REDIRECT_URL in settings.py
