@@ -1,4 +1,4 @@
-# relationship_app/urls.py
+# LibraryProject/relationship_app/urls.py
 
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
@@ -19,7 +19,7 @@ urlpatterns = [
     path('librarian-dashboard/', views.librarian_view, name='librarian_dashboard'),
     path('member-dashboard/', views.member_view, name='member_dashboard'),
 
-    # New: URLs for custom permissions (Book operations)
+    # URLs for custom permissions (Book operations)
     path('books/add/', views.add_book, name='add_book'),
     path('books/<int:pk>/edit/', views.edit_book, name='edit_book'),
     path('books/<int:pk>/delete/', views.delete_book, name='delete_book'),
