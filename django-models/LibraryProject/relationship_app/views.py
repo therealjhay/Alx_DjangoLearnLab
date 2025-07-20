@@ -5,13 +5,12 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
-# This is the line that was missing. It's necessary for the decorator to work.
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required 
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 
 from .models import Book, Library, UserProfile
 from .forms import BookForm
 
-# Helper functions for role checking (from previous task)
+# Helper functions for role checking
 def is_admin(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
@@ -21,19 +20,19 @@ def is_librarian(user):
 def is_member(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
-# Function-based view to list all books (from previous task)
+# Function-based view to list all books
 def list_books(request):
     books = Book.objects.all().select_related('author')
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
 
-# Class-based view to display details for a specific library (from previous task)
+# Class-based view to display details for a specific library
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# Function-based view for user registration (from previous task)
+# Function-based view for user registration
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -45,7 +44,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# Role-based views (from previous task)
+# Role-based views
 @login_required
 @user_passes_test(is_admin, login_url='/app/login/')
 def admin_view(request):
