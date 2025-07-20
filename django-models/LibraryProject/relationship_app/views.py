@@ -2,11 +2,12 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserCreationForm # For registration
-from django.contrib.auth import login # For automatic login after registration
-from django.contrib.auth.views import LoginView, LogoutView # Built-in views
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required, user_passes_test 
 
-from .models import Book, Library, UserProfile # Updated import
+from .models import Book, Library, UserProfile
 
 # Helper functions for role checking
 def is_admin(user):
@@ -40,7 +41,7 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# New: Function-based view for user registration
+# Function-based view for user registration
 def register(request):
     """
     Handles user registration.
@@ -49,24 +50,33 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user) # Log the user in immediately after registration
-            return redirect('books_list') # Redirect to books list or a dashboard
+            login(request, user)
+            return redirect('books_list')
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# New: Class-based view for user login
-class CustomLoginView(LoginView):
+# New: Role-based views with access restrictions
+@login_required 
+@user_passes_test(is_admin, login_url='/app/login/') 
+def admin_view(request):
     """
-    Handles user login using Django's built-in LoginView.
+    View accessible only to Admin users.
     """
-    template_name = 'relationship_app/login.html'
-    # success_url is configured via LOGIN_REDIRECT_URL in settings.py
+    return render(request, 'relationship_app/admin_view.html', {'message': 'Welcome, Admin!'})
 
-# New: Class-based view for user logout
-class CustomLogoutView(LogoutView):
+@login_required
+@user_passes_test(is_librarian, login_url='/app/login/')
+def librarian_view(request):
     """
-    Handles user logout using Django's built-in LogoutView.
+    View accessible only to Librarian users.
     """
-    template_name = 'relationship_app/logout.html'
-    # next_page is configured via LOGOUT_REDIRECT_URL in settings.py
+    return render(request, 'relationship_app/librarian_view.html', {'message': 'Welcome, Librarian!'})
+
+@login_required
+@user_passes_test(is_member, login_url='/app/login/')
+def member_view(request):
+    """
+    View accessible only to Member users.
+    """
+    return render(request, 'relationship_app/member_view.html', {'message': 'Welcome, Member!'})
