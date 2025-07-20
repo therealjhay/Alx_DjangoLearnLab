@@ -2,14 +2,13 @@
 
 from django.shortcuts import render
 from django.views.generic import DetailView
-from .models import Book, Library
+from .models import Book, Library  # This line imports both Book and Library models
 
 # Function-based view to list all books
 def list_books(request):
     """
     Renders a list of all books and their authors.
     """
-    # This line queries the database for all Book objects
     books = Book.objects.all().select_related('author')
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
