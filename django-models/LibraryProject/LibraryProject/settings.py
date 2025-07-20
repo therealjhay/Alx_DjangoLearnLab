@@ -123,3 +123,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Redirect URLs after login/logout
+LOGIN_REDIRECT_URL = '/app/books/'  # Redirect to the books list after successful login
+LOGOUT_REDIRECT_URL = '/app/login/' # Redirect to the login page after logout
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+STATIC_URL = 'static/'
+
+# Define where Django should look for static files in your apps
+# This is for static files specific to your apps (like styles.css in relationship_app)
+STATICFILES_DIRS = [
+    BASE_DIR / "static", # A common place for project-wide static files
+]
+
+# Ensure 'django.contrib.staticfiles' is in INSTALLED_APPS (it usually is by default)
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth', # Make sure this is present
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles', # Make sure this is present
+#     'relationship_app',
+# ]
