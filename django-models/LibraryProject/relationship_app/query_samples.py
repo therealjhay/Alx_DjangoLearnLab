@@ -2,7 +2,7 @@ import os
 import django
 
 # Setup Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_models.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
@@ -17,10 +17,11 @@ def get_books_in_library(library_name):
     library = Library.objects.get(name=library_name)
     return library.books.all()
 
-# 🧑‍🏫 Retrieve the librarian for a library
+# 🧑‍🏫 Retrieve the librarian for a library using correct syntax
 def get_librarian_for_library(library_name):
     library = Library.objects.get(name=library_name)
-    return library.librarian
+    librarian = Librarian.objects.get(library=library)
+    return librarian
 
 # 🧪 Example usage
 if __name__ == "__main__":
