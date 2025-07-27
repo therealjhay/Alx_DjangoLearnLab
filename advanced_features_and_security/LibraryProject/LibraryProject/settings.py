@@ -160,3 +160,87 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #     'django.contrib.staticfiles', # Make sure this is present
 #     'relationship_app',
 # ]
+
+# advanced_features_and_security/advanced_features_and_security/settings.py
+
+# ... (rest of your settings) ...
+
+# -----------------------------------------------------------------------------
+# STEP 1: CONFIGURE SECURE SETTINGS
+# Best practices for production security settings
+# -----------------------------------------------------------------------------
+
+# 1. Set DEBUG to False in production
+# WARNING: Never deploy with DEBUG = True in a production environment.
+# It exposes sensitive information and allows arbitrary code execution.
+DEBUG = False # Set to False for production deployments
+
+# If DEBUG is False, you MUST configure ALLOWED_HOSTS
+# Example: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', '127.0.0.1']
+ALLOWED_HOSTS = ['*'] # USE YOUR ACTUAL DOMAIN NAMES IN PRODUCTION!
+                      # '*' is for demonstration only in a controlled environment.
+
+# 2. Configure browser-side protections
+# These headers are sent with your responses to tell browsers how to behave
+# and to prevent certain attacks.
+
+# X-Content-Type-Options: Prevents browsers from "sniffing" a response away
+# from the declared content-type. This can mitigate MIME-type confusion attacks.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# X-XSS-Protection: Enables the browser's built-in XSS filter.
+# Note: Modern browsers largely use CSP instead, but this is a good fallback.
+SECURE_BROWSER_XSS_FILTER = True
+
+# X-Frame-Options: Prevents your site from being embedded in a <frame>, <iframe>, <embed>
+# tags. This helps prevent clickjacking attacks.
+X_FRAME_OPTIONS = 'DENY' # 'DENY' prevents framing by any site. 'SAMEORIGIN' allows your own site.
+
+# 3. Ensure cookies are sent over HTTPS only
+# These settings enforce that session and CSRF cookies are only sent over
+# a secure (HTTPS) connection, preventing them from being intercepted by
+# man-in-the-middle attacks.
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# 4. Enforce HSTS (HTTP Strict Transport Security)
+# Tells browsers to always connect to your site via HTTPS for a specified duration.
+# This prevents downgrade attacks and cookie hijacking.
+# SECURE_HSTS_SECONDS = 31536000 # 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True # Apply for browser preload lists
+
+# Note: HSTS requires your site to be fully served over HTTPS.
+# Uncomment these in a production environment after setting up HTTPS.
+
+# 5. Redirect HTTP to HTTPS (for production)
+# Redirects all non-HTTPS requests to HTTPS.
+# SECURE_SSL_REDIRECT = True
+# Note: Requires a proper HTTPS setup on your server.
+
+# 6. Set a strong SECRET_KEY (already should be, but emphasizing)
+# This is crucial for security. Django uses it for cryptographic signing.
+# NEVER hardcode it in production; use environment variables.
+# For demonstration:
+# SECRET_KEY = 'django-insecure-your-very-strong-and-unique-secret-key-here!'
+# Example for production:
+# import os
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'default-for-dev-only')
+
+# ... (rest of your settings) ...
+
+# Middleware Configuration:
+# Ensure these security middlewares are present and in the correct order.
+# CsrfViewMiddleware should be before any middleware that assumes the request has a csrf_token.
+# SecurityMiddleware is Django's built-in for X-Frame-Options, X-XSS-Protection etc.
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware', # Recommended first for many security headers
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', # Crucial for CSRF protection
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Ensures X_FRAME_OPTIONS is applied
+    # ... any other custom or third-party middlewares
+]
