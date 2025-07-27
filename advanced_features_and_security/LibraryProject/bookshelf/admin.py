@@ -33,6 +33,8 @@ class BookAdmin(admin.ModelAdmin):
     # Books will be ordered by title alphabetically.
     ordering = ('title',)
 
+    ["admin.site.register(CustomUser, CustomUserAdmin)"]
+
     # fields: Controls the order of fields on the edit form.
     # If not specified, fields will appear in the order they are defined in the model.
     # fields = ('title', 'author', 'publication_year') # Optional: uncomment to explicitly order fields on the edit form
