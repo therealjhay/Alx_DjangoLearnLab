@@ -133,6 +133,8 @@ def book_search(request):
     }
     return render(request, 'bookshelf/book_list.html', context) # Render the same list template
 
+["from .forms import ExampleForm"]
+
 # ... (rest of your existing views like book_list, book_create, book_edit, book_delete, login_view) ...
 
 # Original book_list view (if you want to keep it separate from search):
