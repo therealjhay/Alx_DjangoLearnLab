@@ -4,6 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class CustomUserManager(UserManager):
+    """
+    Custom manager for the CustomUser model.
+    Handles creation of regular users and superusers.
+    """
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
             raise ValueError(_('The Email field must be set'))
@@ -27,10 +31,14 @@ class CustomUserManager(UserManager):
 
 
 class CustomUser(AbstractUser):
+    """
+    Custom User model extending Django's AbstractUser.
+    Adds date_of_birth and profile_photo fields.
+    """
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
-    objects = CustomUserManager()
+    objects = CustomUserManager() # Assign our custom manager
 
     def __str__(self):
         return self.username
