@@ -1,9 +1,10 @@
+{# advanced_features_and_security/bookshelf/templates/bookshelf/login.html #}
 {% extends 'bookshelf/base.html' %}
 
 {% block content %}
     <h2>Login</h2>
     <form method="post">
-        {% csrf_token %}
+        {% csrf_token %} {# CSRF token for the login form as well #}
         {{ form.as_p }}
         <button type="submit">Login</button>
     </form>
