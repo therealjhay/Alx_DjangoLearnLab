@@ -1,40 +1,25 @@
-\# LibraryProject
+# Advanced Features and Security - Django Project
 
+This project demonstrates custom user models, permissions, and groups in Django.
 
+## Permissions and Groups Setup
 
-This is a basic Django project for a library management system.
+This project implements a robust access control system using Django's built-in groups and custom permissions.
 
+### 1. Custom Permissions (defined in `bookshelf/models.py`)
 
+Custom permissions are defined on the `Book` model to allow granular control over book-related actions:
+- `can_view`: Allows viewing book details and the book list.
+- `can_create`: Allows adding new books.
+- `can_edit`: Allows modifying existing books.
+- `can_delete`: Allows removing books from the system.
 
-\## Setup
-
-
-
-1\.  Ensure Python and Django are installed.
-
-2\.  Navigate to the project directory: `cd LibraryProject`
-
-3\.  Run the development server: `python manage.py runserver`
-
-
-
-\## Project Structure
-
-
-
-\-   `manage.py`: A command-line utility for interacting with the project.
-
-\-   `LibraryProject/`: The actual Python package for your project.
-
-&nbsp;   -   `\_\_init\_\_.py`: An empty file that tells Python this directory should be considered a Python package.
-
-&nbsp;   -   `settings.py`: Configuration for this Django project.
-
-&nbsp;   -   `urls.py`: The URL declarations for this Django project.
-
-&nbsp;   -   `asgi.py`: An entry-point for ASGI-compatible web servers to serve your project.
-
-&nbsp;   -   `wsgi.py`: An entry-point for WSGI-compatible web servers to serve your project.
-
-
-
+These permissions are added to the `Book` model's `Meta` class:
+```python
+class Meta:
+    permissions = [
+        ("can_view", "Can view book"),
+        ("can_create", "Can create book"),
+        ("can_edit", "Can edit book"),
+        ("can_delete", "Can delete book"),
+    ]
