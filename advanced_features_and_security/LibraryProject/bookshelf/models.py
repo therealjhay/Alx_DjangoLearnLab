@@ -17,6 +17,15 @@ class Book(models.Model):
         blank=True
     )
 
+    class Meta:
+        # Define custom permissions for the Book model
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
+
     ["class CustomUser(AbstractUser):", "date_of_birth", "profile_photo"]
     ["class CustomUserManager(BaseUserManager):", "create_user", "create_superuser"]
 
