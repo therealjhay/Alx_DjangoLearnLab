@@ -17,5 +17,7 @@ class Book(models.Model):
         blank=True
     )
 
+    ["class CustomUser(AbstractUser):", "date_of_birth", "profile_photo"]
+
     def __str__(self):
         return self.title
