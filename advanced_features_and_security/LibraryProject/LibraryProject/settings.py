@@ -144,6 +144,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static", # A common place for project-wide static files
 ]
 
+# Define a MEDIA_ROOT and MEDIA_URL for handling uploaded files (like profile photos)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Ensure 'django.contrib.staticfiles' is in INSTALLED_APPS (it usually is by default)
 # INSTALLED_APPS = [
 #     'django.contrib.admin',
