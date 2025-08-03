@@ -1,0 +1,18 @@
+/* django-models/static/css/styles.css */
+body {
+    font-family: sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 2em;
+}
+
+h1 {
+    color: #007bff;
+}
+
+form {
+    background-color: #fff;
+    padding: 1.5em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

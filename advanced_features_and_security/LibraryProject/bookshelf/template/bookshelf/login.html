@@ -1,0 +1,14 @@
+{# advanced_features_and_security/bookshelf/templates/bookshelf/login.html #}
+{% extends 'bookshelf/base.html' %}
+
+{% block content %}
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %} {# CSRF token for the login form as well #}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    {% if form.errors %}
+        <p style="color: red;">Your username and password didn't match. Please try again.</p>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,12 @@
+{# advanced_features_and_security/bookshelf/templates/bookshelf/book_form.html #}
+{% extends 'bookshelf/base.html' %}
+
+{% block content %}
+    <h2>{{ action }} Book</h2>
+    <form method="post">
+        {% csrf_token %} {# CRUCIAL: This tag inserts a hidden input field with the CSRF token #}
+        {{ form.as_p }}
+        <button type="submit">{{ action }} Book</button>
+    </form>
+    <p><a href="{% url 'book_list' %}">Back to Book List</a></p>
+{% endblock content %}

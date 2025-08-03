@@ -1,0 +1,33 @@
+{# advanced_features_and_security/bookshelf/templates/bookshelf/book_list.html #}
+{% extends 'bookshelf/base.html' %}
+
+{% block content %}
+    <h2>Book List</h2>
+
+    {# Add a search form #}
+    <form action="{% url 'book_search' %}" method="get">
+        <input type="text" name="q" placeholder="Search by title or author" value="{{ query|default_if_none:'' }}">
+        <button type="submit">Search</button>
+    </form>
+    <br>
+
+    {% if user_can_create %}
+        <p><a href="{% url 'book_create' %}">Add New Book</a></p>
+    {% endif %}
+
+    <ul>
+        {% for book in books %}
+            <li>
+                {{ book.title }} by {{ book.author_name }}
+                {% if user_can_edit %}
+                    - <a href="{% url 'book_edit' book.pk %}">Edit</a>
+                {% endif %}
+                {% if user_can_delete %}
+                    - <a href="{% url 'book_delete' book.pk %}">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No books available.</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

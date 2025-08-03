@@ -1,0 +1,17 @@
+<!-- relationship_app/templates/relationship_app/edit_book.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Book: {{ book.title }}</title>
+</head>
+<body>
+    <h1>Edit Book: {{ book.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Book</button>
+    </form>
+    <p><a href="{% url 'books_list' %}">Back to Book List</a></p>
+</body>
+</html>
