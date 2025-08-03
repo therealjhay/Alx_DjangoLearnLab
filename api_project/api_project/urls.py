@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView # Import RedirectView
+from rest_framework.authtoken.views import obtain_auth_token # Import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # This URL will give you a token for a user
+    path('api/token-auth/', obtain_auth_token),
     path('api/', include('api.urls')),
     # Add this line to redirect the root URL to your API endpoint
     path('', RedirectView.as_view(url='api/books/', permanent=False)),

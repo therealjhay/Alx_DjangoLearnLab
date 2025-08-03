@@ -1,4 +1,5 @@
 from rest_framework import generics, viewsets # <-- Make sure 'viewsets' is imported here
+from rest_framework.permissions import IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
 
@@ -11,3 +12,4 @@ class BookList(generics.ListAPIView):
 class BookViewSet(viewsets.ModelViewSet): # This line now has 'viewsets' defined
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
