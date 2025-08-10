@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, serializers
 from .models import Book
 from .serializers import BookSerializer
 from django.utils import timezone
+"from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated"
 
 # 📄 ListView — Retrieve all books (public)
 class BookListView(generics.ListAPIView):
