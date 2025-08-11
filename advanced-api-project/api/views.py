@@ -1,5 +1,7 @@
-from rest_framework import generics, permissions, filters, serializers
+from rest_framework import generics, permissions, serializers
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
 from .models import Book
 from .serializers import BookSerializer
 from django.utils import timezone
@@ -17,8 +19,7 @@ class BookListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     # Enable filter/search/order backends
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # Fields available for filtering
     filterset_fields = ['title', 'author', 'publication_year']
 
