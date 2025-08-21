@@ -1,26 +1,25 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, ProfileForm
 
-def register_view(request):
+# ✅ Registration view
+def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('profile')
+            form.save()  # ➕ Creates the user
+            return redirect('login')  # 🔁 You can redirect to a welcome page instead
     else:
         form = CustomUserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'auth/register.html', {'form': form})  # ✅ Leave as-is
 
+# ✅ Profile view (requires login)
 @login_required
-def profile_view(request):
+def profile(request):
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, instance=request.user)
+        form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
-            form.save()
-            return redirect('profile')
+            form.save()  # ➕ Updates user info
     else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'registration/profile.html', {'form': form})
+        form = ProfileForm(instance=request.user)
+    return render(request, 'auth/profile.html', {'form': form})  # ✅ Leave as-is
