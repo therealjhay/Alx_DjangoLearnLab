@@ -7,6 +7,7 @@ from .views import (
     PostDeleteView
 )
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
+from .views import search_posts, posts_by_tag
 
 urlpatterns = [
     # 📄 List all posts
@@ -23,14 +24,15 @@ urlpatterns = [
 
     # ❌ Delete a post
     path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name='post-delete'),
-]
 
-["post/<int:pk>/delete/", "post/<int:pk>/update/", "post/new/"]
+    # 🔎 Search posts
+    path('search/', search_posts, name='search-posts'),
 
+    # 🏷️ Posts by tag
+    path('tags/<str:tag_name>/', posts_by_tag, name='posts-by-tag'),
 
-urlpatterns += [
+    # 💬 Comment URLs
     path('posts/<int:post_id>/comments/new/', CommentCreateView.as_view(), name='comment-create'),
     path('comments/<int:pk>/edit/', CommentUpdateView.as_view(), name='comment-update'),
     path('comments/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
 ]
-["comment/<int:pk>/update/", "post/<int:pk>/comments/new/", "comment/<int:pk>/delete/"]

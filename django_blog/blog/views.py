@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
 from .forms import CommentForm
+from django.db.models import Q
 
 
 
@@ -45,7 +46,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         post = self.get_object()
-        return self.request.user == post.author  # ✅ Only author can edit
+        return self.request.user == post.author  # type: ignore # ✅ Only author can edit
 
 # ✅ Delete a post
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -55,7 +56,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         post = self.get_object()
-        return self.request.user == post.author  # ✅ Only author can delete
+        return self.request.user == post.author  # type: ignore # ✅ Only author can delete
     
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -75,7 +76,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return self.object.post.get_absolute_url()
+        return self.object.post.get_absolute_url() # type: ignore
 
 # ✅ Update a comment
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -84,10 +85,10 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'blog/comment_form.html'
 
     def test_func(self):
-        return self.request.user == self.get_object().author
+        return self.request.user == self.get_object().author # type: ignore
 
     def get_success_url(self):
-        return self.object.post.get_absolute_url()
+        return self.object.post.get_absolute_url() # type: ignore
 
 # ✅ Delete a comment
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -95,7 +96,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'blog/comment_confirm_delete.html'
 
     def test_func(self):
-        return self.request.user == self.get_object().author
+        return self.request.user == self.get_object().author # type: ignore
 
     def get_success_url(self):
-        return self.object.post.get_absolute_url()
+        return self.object.post.get_absolute_url() # type: ignore
+    
+def search_posts(request):
+    query = request.GET.get('q')
+    results = Post.objects.filter(
+        Q(title__icontains=query) |
+        Q(content__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})
+from django.shortcuts import render
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name__iexact=tag_name)
+    return render(request, 'blog/posts_by_tag.html', {'posts': posts, 'tag_name': tag_name})
