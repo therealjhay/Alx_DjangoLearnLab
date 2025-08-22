@@ -18,8 +18,8 @@ urlpatterns = [
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
 
     # ✏️ Update a post
-    path('posts/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
+    path("posts/<int:pk>/update/", PostUpdateView.as_view(), name='post-update'),
 
     # ❌ Delete a post
-    path('posts/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name='post-delete'),
 ]
