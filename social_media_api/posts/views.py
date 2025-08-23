@@ -80,3 +80,6 @@ class LikeView(APIView):
                     target=post
                 )
             return Response({"status": "liked"}, status=status.HTTP_201_CREATED)
+        
+
+#["generics.get_object_or_404(Post, pk=pk)", "Like.objects.get_or_create(user=request.user, post=post)", "Notification.objects.create"]
