@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
@@ -16,6 +16,8 @@ class UserRegistrationView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            if isinstance(user, list):
+                user = user[0]
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key, 'user_id': user.id, 'username': user.username}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -27,7 +29,6 @@ class UserLoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        # This line is correct for an ObtainAuthToken view
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({
@@ -36,7 +37,7 @@ class UserLoginView(ObtainAuthToken):
             'username': user.username
         })
 
-class UserProfileView(APIView):
+class CurrentUserProfileView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -70,6 +71,14 @@ class UnfollowUserView(APIView):
 
         request.user.following.remove(user_to_unfollow)
         return Response({"status": "You have unfollowed this user."}, status=status.HTTP_200_OK)
+    
+class UserProfileView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_object(self):
+        return self.request.user
     
 
 #["generics.GenericAPIView", "permissions.IsAuthenticated", "CustomUser.objects.all()"]

@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True)
+
     followers = models.ManyToManyField(
         'self', 
         symmetrical=False, 
@@ -17,7 +18,7 @@ class CustomUser(AbstractUser):
         related_name='following_list', 
         blank=True
     )
-    # Add related_name to resolve clashes
+    
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_groups',
