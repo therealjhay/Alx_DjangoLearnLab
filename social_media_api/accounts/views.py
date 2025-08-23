@@ -70,3 +70,6 @@ class UnfollowUserView(APIView):
 
         request.user.following.remove(user_to_unfollow)
         return Response({"status": "You have unfollowed this user."}, status=status.HTTP_200_OK)
+    
+
+#["generics.GenericAPIView", "permissions.IsAuthenticated", "CustomUser.objects.all()"]
