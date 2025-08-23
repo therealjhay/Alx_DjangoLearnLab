@@ -1,5 +1,3 @@
-# accounts/serializers.py
-
 from rest_framework import serializers
 from .models import CustomUser
 
@@ -19,3 +17,5 @@ class UserSerializer(serializers.ModelSerializer):
             profile_picture=validated_data.get('profile_picture'),
         )
         return user
+    
+    #["from rest_framework.authtoken.models import Token", "serializers.CharField()", "Token.objects.create", "get_user_model().objects.create_user"]
