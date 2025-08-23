@@ -42,3 +42,9 @@ The `CustomUser` model extends Django's `AbstractUser` and includes additional f
 -   `bio`: A text field for a user's biography.
 -   `profile_picture`: An image field to store the user's profile photo.
 -   `followers`: A many-to-many relationship with itself to track who a user is following.
+
+Follow a User: POST /api/follow/<int:user_id>/
+
+Unfollow a User: POST /api/unfollow/<int:user_id>/
+
+User Feed: GET /api/feed/
