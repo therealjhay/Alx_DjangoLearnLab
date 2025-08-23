@@ -14,3 +14,4 @@ urlpatterns = [
     path('feed/', PostFeedView.as_view(), name='post-feed'),
      path('posts/<int:pk>/like/', LikeView.as_view(), name='like-post'),
 ]
+#["<int:pk>/unlike/"]
