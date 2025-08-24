@@ -141,3 +141,5 @@ REST_FRAMEWORK = {
 SECURE_BROWSER_XSS_FILTER = True # ⬅️  ADDED:  Helps prevent XSS attacks.
 X_FRAME_OPTIONS = 'DENY' # ⬅️  ADDED:  Prevents clickjacking.
 SECURE_CONTENT_TYPE_NOSNIFF = True # ⬅️  ADDED:  Prevents browsers from MIME-sniffing content.
+
+#["SECURE_SSL_REDIRECT"]
